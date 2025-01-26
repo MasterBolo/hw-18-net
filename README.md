@@ -7,6 +7,7 @@
 Описание домашнего задания
    1. Скачать и развернуть Vagrant-стенд https://github.com/erlong15/otus-linux/tree/network
    2. Построить следующую сетевую архитектуру:
+
    Сеть office1
    - 192.168.2.0/26      - dev
    - 192.168.2.64/26     - test servers
