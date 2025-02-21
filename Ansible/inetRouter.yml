@@ -1,0 +1,56 @@
+- name: Base set up
+  hosts: inetRouter
+ 
+  become: yes
+  tasks:
+  - name: install softs
+    apt:
+      name:
+        - traceroute
+      state: present
+      update_cache: true
+  
+  - name: stop ufw
+    service:
+      name: ufw
+      state: stopped
+      enabled: false
+  
+  - name: Set up NAT on inetRouter
+    template: 
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: root
+      group: root
+      mode: "{{ item.mode }}"
+    with_items:
+      - { src: "templates/inetRouter/iptables_rules.ipv4", dest: "/etc/iptables_rules.ipv4", mode: "0644" }
+      - { src: "templates/inetRouter/iptables_restore", dest: "/etc/network/if-pre-up.d/iptables", mode: "0755" }
+    when: (ansible_hostname == "inetRouter")
+
+  - name: set up forward packages across routers
+    sysctl:
+      name: net.ipv4.conf.all.forwarding
+      value: '1'
+      state: present
+    when: "'routers' in group_names"
+
+  - name: add routes
+    template: 
+      src: templates/inetRouter/50-vagrant.yaml
+      dest: /etc/netplan/50-vagrant.yaml
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: netplan apply
+    ansible.builtin.shell: netplan apply
+    become: true
+
+  - name: Reboot machine 
+    ansible.builtin.reboot:
+      reboot_timeout: 120
+
+
+  
+

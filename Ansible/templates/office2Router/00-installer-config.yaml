@@ -1,0 +1,15 @@
+# This is the network config written by 'subiquity'
+network:
+  ethernets:
+    eth0:
+      dhcp4: true
+      dhcp4-overrides:
+          use-routes: false
+      dhcp6: false
+    eth1:
+      routes: 
+       - to: default
+         via: 192.168.255.5
+      mtu: 1500
+  version: 2
+   

@@ -1,0 +1,48 @@
+- name: office2Server | set office2Server
+  hosts: office2Server
+  become: true
+  
+  tasks:
+    - name: stop ufw
+      become: yes
+      become_user: root
+      systemd:
+        name: ufw
+        state: stopped
+        enabled: no
+
+    - name: update
+      apt:
+        update_cache=yes
+      tags:
+        - update apt
+
+    - name: install traceroute on ubuntu
+      apt:
+        name:
+          - traceroute
+        state: present
+        update_cache: true
+
+    - name: disable default route & add default gateway
+      template: 
+        src: templates/office2Server/00-installer-config.yaml
+        dest: /etc/netplan/00-installer-config.yaml
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: netplan apply
+      ansible.builtin.shell: netplan apply
+      become: true
+
+    
+
+    
+
+
+
+    
+
+
+
