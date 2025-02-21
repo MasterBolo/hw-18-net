@@ -176,14 +176,14 @@ COMMIT
 ````
 Создаем скрипт востановления правил после перезагрузки, в файле "iptables_restore":
    
- ````
+````
  #!/bin/sh
 /sbin/iptables-restore < /etc/iptables_rules.ipv4
-```
+````
 # Соединить офисы в сеть согласно логической схемы и настроить роутинг
 
-   Для настройки роутинга между подсетями central-office1-office2 добавим обратные маршруты на сервере centralRouter, в 
-файле 50-vagrant.yaml: 
+Для настройки роутинга между подсетями central-office1-office2 добавим обратные маршруты на сервере centralRouter, в 
+файле 50-vagrant.yaml:
 ```
 ---
 network:
